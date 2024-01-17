@@ -1,10 +1,13 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Player : MonoBehaviour
 {
+    public static event Action<int> OnScoreGained; 
     float speed = 5f;
+    int score = 0;
 
     void Update()
     {
@@ -21,5 +24,11 @@ public class Player : MonoBehaviour
 
         moveDir = moveDir.normalized;
         transform.position += speed * Time.deltaTime * moveDir;
+
+        if(Input.GetKeyDown(KeyCode.Space))
+        {
+            score++;
+            OnScoreGained?.Invoke(score);
+        }
     }
 }
