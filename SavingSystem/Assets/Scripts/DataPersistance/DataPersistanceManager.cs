@@ -4,16 +4,22 @@ using UnityEngine;
 
 public class DataPersistanceManager : MonoBehaviour
 {
-    GameData data;
+    public static DataPersistanceManager Instance {get; private set;}
+
+    public GameData data {get; private set;}
+    FileManager fileManager;
 
     void Awake()
     {
-        if(data == null)
-            data = new GameData();    
+        Instance = this;
+        fileManager ??= new(Application.persistentDataPath, "test");    
+        data = fileManager.LoadData();
+        data ??= new();    
     }
 
-    // public static SaveGame()
-    // {
-        
-    // }
+    public void SaveGame(int score)
+    {
+        data.score = score;
+        fileManager.SaveData(data);
+    }
 }

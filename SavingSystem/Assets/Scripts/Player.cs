@@ -9,6 +9,12 @@ public class Player : MonoBehaviour
     float speed = 5f;
     int score = 0;
 
+    void Start()
+    {
+        score = DataPersistanceManager.Instance.data.score;
+        OnScoreGained?.Invoke(score);
+    }
+
     void Update()
     {
         Vector3 moveDir = Vector3.zero;
@@ -30,5 +36,8 @@ public class Player : MonoBehaviour
             score++;
             OnScoreGained?.Invoke(score);
         }
+
+        if(Input.GetKeyDown(KeyCode.N))
+            DataPersistanceManager.Instance.SaveGame(score);
     }
 }
