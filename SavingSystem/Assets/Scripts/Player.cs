@@ -3,7 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : MonoBehaviour, IHasPersistentData
 {
     public static event Action<int> OnScoreGained; 
     float speed = 5f;
@@ -11,7 +11,6 @@ public class Player : MonoBehaviour
 
     void Start()
     {
-        score = DataPersistanceManager.Instance.data.score;
         OnScoreGained?.Invoke(score);
     }
 
@@ -36,8 +35,16 @@ public class Player : MonoBehaviour
             score++;
             OnScoreGained?.Invoke(score);
         }
+    }
 
-        if(Input.GetKeyDown(KeyCode.N))
-            DataPersistanceManager.Instance.SaveGame(score);
+    public void SaveData(GameData data)
+    {
+        data.score = score;
+    }
+
+    public void LoadData(GameData data)
+    {
+        score = data.score;
+        OnScoreGained?.Invoke(score);
     }
 }

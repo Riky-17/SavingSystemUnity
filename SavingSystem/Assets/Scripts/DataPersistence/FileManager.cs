@@ -1,7 +1,4 @@
 using System.IO;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 using Newtonsoft.Json;
 
 public class FileManager
@@ -17,7 +14,7 @@ public class FileManager
 
     public void SaveData(GameData data)
     {
-        string fullPath = Path.Combine(dataPath, file);
+        string fullPath = Path.Combine(dataPath, file);;
 
         Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
         JsonSerializer serializer = new JsonSerializer();
