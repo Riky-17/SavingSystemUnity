@@ -35,16 +35,23 @@ public class Player : MonoBehaviour, IHasPersistentData
             score++;
             OnScoreGained?.Invoke(score);
         }
+
+        if(Input.GetKeyDown(KeyCode.Escape))
+            DataPersistenceManager.Instance.LoadMainMenuScene();
     }
 
     public void SaveData(GameData data)
     {
         data.score = score;
+        data.playerPosX = transform.position.x;
+        data.playerPosY = transform.position.y;
+        data.playerPosZ = transform.position.z;
     }
 
     public void LoadData(GameData data)
     {
         score = data.score;
         OnScoreGained?.Invoke(score);
+        transform.position = data.PlayerPos;
     }
 }

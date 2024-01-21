@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.IO;
 using Newtonsoft.Json;
 
@@ -12,9 +13,9 @@ public class FileManager
         this.file = file;
     }
 
-    public void SaveData(GameData data)
+    public void SaveData(GameData data, string slotID)
     {
-        string fullPath = Path.Combine(dataPath, file);;
+        string fullPath = Path.Combine(dataPath, slotID, file);;
 
         Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
         JsonSerializer serializer = new JsonSerializer();
@@ -27,14 +28,14 @@ public class FileManager
 
     }
 
-    public GameData LoadData()
+    public GameData LoadData(string slotID)
     {
         GameData dataToLoad = null;
-        string fullPath = Path.Combine(dataPath, file);
+        string fullPath = Path.Combine(dataPath, slotID, file);
 
         if (File.Exists(fullPath))
         {
-            JsonSerializer serializer = new JsonSerializer();
+            JsonSerializer serializer = new();
             using FileStream stream = new(fullPath, FileMode.Open);
             using StreamReader sr = new StreamReader(stream);
             using JsonReader reader = new JsonTextReader(sr);
@@ -43,5 +44,28 @@ public class FileManager
         }
 
         return dataToLoad;
+    }
+
+    public Dictionary<string, GameData> GetAllData()
+    {
+        Dictionary<string, GameData> allData = new();
+        IEnumerable<DirectoryInfo> directoryInfos = new DirectoryInfo(dataPath).EnumerateDirectories();
+        GameData slotData;
+
+        foreach (DirectoryInfo directory in directoryInfos)
+        {
+            string slotID = directory.Name;
+            string fullPath = Path.Combine(dataPath, slotID, file);
+
+            if(!File.Exists(fullPath))
+            {
+                continue;
+            }
+
+            slotData = LoadData(slotID);
+            allData.Add(slotID, slotData);
+        }
+
+        return allData;
     }
 }
