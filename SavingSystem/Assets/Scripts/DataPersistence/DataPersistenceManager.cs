@@ -47,9 +47,10 @@ public class DataPersistenceManager : MonoBehaviour
             SaveGame();
     }
 
-    public void StartGame(string slotID)
+    public void StartGame(string slotID, GameData slotData)
     {
         currentSlot = slotID;
+        data = slotData ?? new();
         LoadGameScene();
     }
 
@@ -62,31 +63,25 @@ public class DataPersistenceManager : MonoBehaviour
     void SaveGameData()
     {
         foreach (IHasPersistentData obj in persistentDataObjs)
-        {
             obj.SaveData(data);
-        }
     }
 
-    void LoadGame()
+    void LoadGameData()
     {
-        data = fileManager.LoadData(currentSlot);
-        //if data is null we create a new game data
-        data ??= new();
         foreach (IHasPersistentData obj in persistentDataObjs)
-        {
             obj.LoadData(data);
-        }
     }
 
     void LoadGameScene()
     {
-        SceneManager.LoadScene("SampleScene");
+        SceneLoader.LoadScene(Scenes.FirstLevel);
     }
 
     public void LoadMainMenuScene()
     {
         currentSlot = null;
-        SceneManager.LoadScene("MainMenu");
+        data = null;
+        SceneLoader.LoadScene(Scenes.MainMenu);
     }
 
     List<IHasPersistentData> GetPersistentDataObjs()
@@ -107,6 +102,6 @@ public class DataPersistenceManager : MonoBehaviour
         //searching for objects that have data to save or load
         persistentDataObjs = GetPersistentDataObjs();
         
-        LoadGame();
+        LoadGameData();
     }
 }

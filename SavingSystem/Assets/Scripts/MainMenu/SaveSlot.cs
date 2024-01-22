@@ -7,13 +7,14 @@ using UnityEngine.UI;
 public class SaveSlot : MonoBehaviour
 {
     [SerializeField] TextMeshProUGUI slotText;
-    Button slotButton;
+    GameData slotData;
+    //Button slotButton;
     public string slotID;
 
-    void Awake()
-    {
-        slotButton = GetComponent<Button>();
-    }
+    // void Awake()
+    // {
+    //     slotButton = GetComponent<Button>();
+    // }
 
     // void Start()
     // {
@@ -31,12 +32,13 @@ public class SaveSlot : MonoBehaviour
         }
         else
         {
+            slotData = data;
             slotText.text = $"Score: {data.score}";
         }
     }
 
     public void StartGame()
     {
-        DataPersistenceManager.Instance.StartGame(slotID);
+        DataPersistenceManager.Instance.StartGame(slotID, slotData);
     }
 }

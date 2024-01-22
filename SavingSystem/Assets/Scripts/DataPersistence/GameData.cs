@@ -8,6 +8,7 @@ public class GameData
     public int score;
     public float playerPosX, playerPosY, playerPosZ;
     [JsonIgnore] public Vector3 PlayerPos => new(playerPosX, playerPosY, playerPosZ);
+    public Dictionary<string, bool> collectibles = new();
 
     public GameData()
     {

@@ -30,14 +30,18 @@ public class Player : MonoBehaviour, IHasPersistentData
         moveDir = moveDir.normalized;
         transform.position += speed * Time.deltaTime * moveDir;
 
-        if(Input.GetKeyDown(KeyCode.Space))
+        if(Input.GetKeyDown(KeyCode.Escape))
+            DataPersistenceManager.Instance.LoadMainMenuScene();
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        if(other.gameObject.TryGetComponent(out Collectible collectible))
         {
+            collectible.Collect();
             score++;
             OnScoreGained?.Invoke(score);
         }
-
-        if(Input.GetKeyDown(KeyCode.Escape))
-            DataPersistenceManager.Instance.LoadMainMenuScene();
     }
 
     public void SaveData(GameData data)
