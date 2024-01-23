@@ -9,10 +9,12 @@ public class GameData
     public float playerPosX, playerPosY, playerPosZ;
     [JsonIgnore] public Vector3 PlayerPos => new(playerPosX, playerPosY, playerPosZ);
     public Dictionary<string, bool> collectibles = new();
+    public Scenes scene;
 
     public GameData()
     {
         score = 0;
         playerPosX = playerPosY = playerPosZ = 0;
+        scene = Scenes.FirstLevel;
     }
 }

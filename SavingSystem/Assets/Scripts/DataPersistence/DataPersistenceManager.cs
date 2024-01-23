@@ -51,7 +51,7 @@ public class DataPersistenceManager : MonoBehaviour
     {
         currentSlot = slotID;
         data = slotData ?? new();
-        LoadGameScene();
+        SceneLoader.LoadScene(data.scene);
     }
 
     void SaveGame()
@@ -60,7 +60,7 @@ public class DataPersistenceManager : MonoBehaviour
         fileManager.SaveData(data, currentSlot);
     }
 
-    void SaveGameData()
+    public void SaveGameData()
     {
         foreach (IHasPersistentData obj in persistentDataObjs)
             obj.SaveData(data);
@@ -70,11 +70,6 @@ public class DataPersistenceManager : MonoBehaviour
     {
         foreach (IHasPersistentData obj in persistentDataObjs)
             obj.LoadData(data);
-    }
-
-    void LoadGameScene()
-    {
-        SceneLoader.LoadScene(Scenes.FirstLevel);
     }
 
     public void LoadMainMenuScene()

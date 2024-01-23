@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -33,7 +34,7 @@ public class SaveSlot : MonoBehaviour
         else
         {
             slotData = data;
-            slotText.text = $"Score: {data.score}";
+            slotText.text = $"Score: {data.score} " + string.Concat(data.scene.ToString().Select(x => char.IsUpper(x) ? " " + x : x.ToString())).TrimStart(' ');
         }
     }
 
