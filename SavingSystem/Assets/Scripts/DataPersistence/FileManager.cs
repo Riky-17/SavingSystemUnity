@@ -13,9 +13,11 @@ public class FileManager
         this.file = file;
     }
 
+    string FullPath(string slotID) => Path.Combine(dataPath, slotID, file);
+
     public void SaveData(GameData data, string slotID)
     {
-        string fullPath = Path.Combine(dataPath, slotID, file);;
+        string fullPath = FullPath(slotID);
 
         Directory.CreateDirectory(Path.GetDirectoryName(fullPath));
         JsonSerializer serializer = new JsonSerializer();
@@ -31,7 +33,7 @@ public class FileManager
     public GameData LoadData(string slotID)
     {
         GameData dataToLoad = null;
-        string fullPath = Path.Combine(dataPath, slotID, file);
+        string fullPath = FullPath(slotID);
 
         if (File.Exists(fullPath))
         {
@@ -46,6 +48,25 @@ public class FileManager
         return dataToLoad;
     }
 
+    public void DeleteData(string slotID)
+    {
+        string fullPath = FullPath(slotID);
+
+        if(File.Exists(fullPath))
+            File.Delete(fullPath);
+    }
+
+    public void CopyData(string slotIDCopyFrom, string slotIDCopyTo)
+    {
+        string fullPathCopyFrom = FullPath(slotIDCopyFrom);
+
+        if(File.Exists(fullPathCopyFrom))
+        {
+            GameData data = LoadData(slotIDCopyFrom);
+            SaveData(data, slotIDCopyTo);
+        }
+    }
+
     public Dictionary<string, GameData> GetAllData()
     {
         Dictionary<string, GameData> allData = new();
@@ -55,7 +76,7 @@ public class FileManager
         foreach (DirectoryInfo directory in directoryInfos)
         {
             string slotID = directory.Name;
-            string fullPath = Path.Combine(dataPath, slotID, file);
+            string fullPath = FullPath(slotID);
 
             if(!File.Exists(fullPath))
             {

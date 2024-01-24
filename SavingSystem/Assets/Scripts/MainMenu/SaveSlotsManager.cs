@@ -5,12 +5,37 @@ using UnityEngine;
 
 public class SaveSlotsManager : MonoBehaviour
 {
+    public static SaveSlotsManager Instance {get; private set;}
+
     [SerializeField] GameObject firstScreenUI;
     List<SaveSlot> saveSlots;
+
+    SaveSlot slotToCopyFrom;
+    SaveSlot slotToCopyTo;
+
+    void Awake()
+    {
+        Instance = this;
+    }
 
     void OnEnable()
     {
         saveSlots = new(GetComponentsInChildren<SaveSlot>());
+        UpdateSlotsData();
+    }
+
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Escape))
+        {
+            slotToCopyFrom = null;
+            firstScreenUI.SetActive(true);
+            gameObject.SetActive(false);
+        }
+    }
+
+    public void UpdateSlotsData()
+    {
         Dictionary<string, GameData> allData = DataPersistenceManager.Instance.GetAlldata();
         foreach (SaveSlot saveSlot in saveSlots)
         {
@@ -19,12 +44,28 @@ public class SaveSlotsManager : MonoBehaviour
         }
     }
 
-    void Update()
+    public void SetSlotToCopyFrom(SaveSlot slotFrom)
     {
-        if(Input.GetKeyDown(KeyCode.Escape))
+        slotToCopyFrom = slotFrom;
+        foreach (SaveSlot slot in saveSlots)
         {
-            firstScreenUI.SetActive(true);
-            gameObject.SetActive(false);
+            slot.RemoveListenersToButtons();
+            slot.slotButton.onClick.AddListener(slot.CopyTo);
         }
+    }
+
+    public void SetSlotToCopyTo(SaveSlot slotTo)
+    {
+        slotToCopyTo = slotTo;
+        DataPersistenceManager.Instance.CopyData(slotToCopyFrom.slotID, slotToCopyTo.slotID);
+        UpdateSlotsData();
+
+        foreach (SaveSlot slot in saveSlots)
+        {
+            slot.RemoveListenersToButtons();
+            slot.SetListenersToButtons();
+        }
+
+        slotToCopyFrom = slotToCopyTo = null;
     }
 }

@@ -72,6 +72,16 @@ public class DataPersistenceManager : MonoBehaviour
             obj.LoadData(data);
     }
 
+    public void DeleteData(string slotID)
+    {
+        fileManager.DeleteData(slotID);
+    }
+
+    public void CopyData(string slotIDFrom, string slotIDTo)
+    {
+        fileManager.CopyData(slotIDFrom, slotIDTo);
+    }
+
     public void LoadMainMenuScene()
     {
         currentSlot = null;
