@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -28,7 +26,7 @@ public class DataPersistenceManager : MonoBehaviour
         DontDestroyOnLoad(gameObject);
 
         // creating new file manager
-        fileManager ??= new(Application.persistentDataPath, "test");
+        fileManager ??= new(Application.persistentDataPath, "SaveFile");
     }
     
     void OnEnable()

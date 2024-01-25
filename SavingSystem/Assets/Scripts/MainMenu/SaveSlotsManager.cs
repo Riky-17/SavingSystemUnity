@@ -1,5 +1,3 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -57,7 +55,9 @@ public class SaveSlotsManager : MonoBehaviour
     public void SetSlotToCopyTo(SaveSlot slotTo)
     {
         slotToCopyTo = slotTo;
-        DataPersistenceManager.Instance.CopyData(slotToCopyFrom.slotID, slotToCopyTo.slotID);
+        if(slotToCopyFrom != slotToCopyTo)
+            DataPersistenceManager.Instance.CopyData(slotToCopyFrom.slotID, slotToCopyTo.slotID);
+        
         UpdateSlotsData();
 
         foreach (SaveSlot slot in saveSlots)
